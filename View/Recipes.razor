@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Http.HttpResults
+@if (Model.Partial is Partial partial)
+{
+  @RenderPartial(partial);
+  return;
+}
+
+@code {
+  public enum Partial
+  {
+      List,
+      Recipe,
+      AddForm,
+      DeleteConfirm,
+      EditForm,
+  }
+
+  public RenderFragment List => @<ul>
+    @foreach(var recipe in Model.Recipes)
+    {
+      <ul>@recipe.Name</ul>
+    }
+  </ul>;
+
+  public RenderFragment RenderPartial(Partial partial) => partial switch
+  {
+    Partial.List => @List,
+    _ => @List
+  };
+
+  public record RecipeView(int Id, string Name);
+
+  public record ViewModel(IEnumerable<RecipeView> Recipes, Partial? Partial = null)
+  {
+    public RazorComponentResult<Recipes> Render() => new(new { Model = this });
+  }
+
+  [Parameter, EditorRequired]
+  public ViewModel Model { get; set; } = default!;
+}

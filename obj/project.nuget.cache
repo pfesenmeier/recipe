@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "3z1curT3rlk=",
+  "success": true,
+  "projectFilePath": "/Users/pfes/Code/recipes/recipes.csproj",
+  "expectedPackageFiles": [
+    "/Users/pfes/.nuget/packages/microsoft.aspnetcore.app.internal.assets/11.0.0-rc.1.26425.128/microsoft.aspnetcore.app.internal.assets.11.0.0-rc.1.26425.128.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,23 @@
+/** - hot reload script? */
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Recipes</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0"
+          integrity="sha384-BvJpBiO8Kh31EqtJe5DRIeWrHWnCGkwytKs9NKFi86Hhw96dEqdEMzZDeK9iEGTc"
+          crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+@code {
+  [Parameter]
+  public RenderFragment ChildContent { get; set; } = default!;
+}
