@@ -1,38 +1,101 @@
 @using Microsoft.AspNetCore.Http.HttpResults
-@if (Model.Partial is Partial partial)
-{
-  @RenderPartial(partial);
-  return;
+
+<Layout>
+  <section id="recipes-table">
+    <article id="recipes">
+@RecipeList(Model.Recipes)
+@code {
+  public static RenderFragment<RecipeView> Recipe => recipe => @<tr id="recipe-@recipe.Id">
+    <th scope="row">@recipe.Name</th>
+    <td>
+      <button hx-get="/recipes/@(recipe.Id)/edit"
+        hx-target="#edit-dialog"
+        hx-on:htmx:after:request="q('#edit-dialog').show()">
+        ✏️
+      </button>
+    </td>
+    <td>
+      <button hx-get="/recipes/@(recipe.Id)/delete"
+        hx-target="#delete-dialog"
+        hx-on:htmx:after:request="q('#delete-dialog').show()">
+        🗑️
+      </button>
+    </td>
+    <td></td>
+  </tr>;
+
+  public static RenderFragment<IEnumerable<RecipeView>> RecipeList => recipes =>
+ @<table>
+   <thead>
+     <tr>
+       <th scope="col"> Recipe </th>
+       <th scope="col"> Edit </th>
+       <th scope="col"> Delete </th>
+     </tr>
+   </thead>
+   <tbody>
+     @foreach (var recipe in recipes)
+     {
+       @Recipe(recipe)
+     }
+   </tbody>
+ </table>;
 }
+</article>
+<button command="show-modal" commandfor="add-recipe">Add Recipe</button>
+
+<dialog id="add-recipe">
+  <form hx-post="/recipes" hx-target="#recipes"
+        hx-on:htmx:after:request="if (event.detail.ctx.response.status === 200) { this.reset(); this.closest('dialog').close() }">
+    <hgroup>
+      <h3>Create Recipe</h3>
+      <p>Add a recipe.</p>
+      <input name="name" />
+      <input name="content" />
+    </hgroup>
+    <button type="submit">Save</button>
+    <button commandfor="add-recipe" command="close">Close</button>
+  </form>
+</dialog>
+<dialog id="edit-dialog">
+@code {
+  public static RenderFragment<EditFormValue> EditForm => form =>
+    @<form hx-put="/recipes/@form.Id/edit" hx-target="#recipe-@form.Id" hx-swap="outerHTML"
+           hx-on:htmx:after:request="if (event.detail.ctx.response.status === 200) { this.reset(); this.closest('dialog').close() }">
+      <hgroup>
+        <h3>Edit @form.Name</h3>
+        <p>Update the recipe.</p>
+      </hgroup>
+      <input name="name" value="@form.Name" type="text" />
+      <input name="content" value="@form.Content" type="textarea" />
+      <button type="submit">Save</button>
+      <button commandfor="edit-recipe" command="close">Close</button>
+    </form>;
+}
+</dialog>
+<dialog id="delete-dialog">
+@code {
+  public static RenderFragment<EditFormValue> DeleteForm => form =>
+    @<form hx-delete="/recipes/@form.Id/delete" hx-target="#recipe-@form.Id"
+           hx-on:htmx:after:request="if (event.detail.ctx.response.status === 200) { this.reset(); this.closest('dialog').close() }">
+      <hgroup>
+        <h3>Delete @form.Name</h3>
+        <p>Are you sure?</p>
+      </hgroup>
+      <button type="submit">Save</button>
+      <button commandfor="delete-recipe" command="close">Close</button>
+    </form>;
+}
+</dialog>
+</section>
+</Layout>
 
 @code {
-  public enum Partial
-  {
-      List,
-      Recipe,
-      AddForm,
-      DeleteConfirm,
-      EditForm,
-  }
-
-  public RenderFragment List => @<ul>
-    @foreach(var recipe in Model.Recipes)
-    {
-      <ul>@recipe.Name</ul>
-    }
-  </ul>;
-
-  public RenderFragment RenderPartial(Partial partial) => partial switch
-  {
-    Partial.List => @List,
-    _ => @List
-  };
-
   public record RecipeView(int Id, string Name);
 
-  public record ViewModel(IEnumerable<RecipeView> Recipes, Partial? Partial = null)
+  public record ViewModel(IEnumerable<RecipeView> Recipes)
   {
-    public RazorComponentResult<Recipes> Render() => new(new { Model = this });
+    public RazorComponentResult<Recipes> RenderPage() => new(new { Model = this });
   }
 
   [Parameter, EditorRequired]

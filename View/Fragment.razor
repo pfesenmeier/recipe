@@ -1,0 +1,6 @@
+@code {
+    // Wrapper Component to render RenderFragments in Minimal API endpoints
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; }
+}
+
+  @ChildContent

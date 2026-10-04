@@ -4,7 +4,7 @@ using recipes.View;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents();
 
-builder.Services.AddScoped<RecipeService>();
+builder.Services.AddSingleton<RecipeService>();
 
 var app = builder.Build();
 app.MapRecipesRoutes();
