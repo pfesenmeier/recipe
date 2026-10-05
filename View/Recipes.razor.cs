@@ -53,7 +53,7 @@ public partial class Recipes
   }
 
 
-  public static async Task<IResult> CreateRecipeHandler(RecipeService service,  RecipeInput form)
+  public static async Task<IResult> CreateRecipeHandler(RecipeService service, [FromForm] RecipeInput form)
   {
     var recipe = service.CreateRecipe(form);
     RecipeView recipeView = new(recipe.Id, recipe.Name);

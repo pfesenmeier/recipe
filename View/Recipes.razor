@@ -33,7 +33,7 @@
        <th scope="col"> Delete </th>
      </tr>
    </thead>
-   <tbody>
+   <tbody id="recipe-rows">
      @foreach (var recipe in recipes)
      {
        @Recipe(recipe)
@@ -45,16 +45,16 @@
 <button command="show-modal" commandfor="add-recipe">Add Recipe</button>
 
 <dialog id="add-recipe">
-  <form hx-post="/recipes" hx-target="#recipes"
+  <form hx-post="/recipes" hx-target="#recipe-rows" hx-swap="beforeend"
         hx-on:htmx:after:request="if (event.detail.ctx.response.status === 200) { this.reset(); this.closest('dialog').close() }">
     <hgroup>
       <h3>Create Recipe</h3>
       <p>Add a recipe.</p>
       <input name="name" />
-      <input name="content" />
+      <textarea name="content" />
     </hgroup>
     <button type="submit">Save</button>
-    <button commandfor="add-recipe" command="close">Close</button>
+    <button type="button" commandfor="add-recipe" command="close">Cancel</button>
   </form>
 </dialog>
 <dialog id="edit-dialog">
@@ -68,22 +68,23 @@
       </hgroup>
       <input name="name" value="@form.Name" type="text" />
       <input name="content" value="@form.Content" type="textarea" />
+      <textarea name="content" value="@form.Content" />
       <button type="submit">Save</button>
-      <button commandfor="edit-recipe" command="close">Close</button>
+      <button type="button" commandfor="edit-dialog" command="close">Cancel</button>
     </form>;
 }
 </dialog>
 <dialog id="delete-dialog">
 @code {
   public static RenderFragment<EditFormValue> DeleteForm => form =>
-    @<form hx-delete="/recipes/@form.Id/delete" hx-target="#recipe-@form.Id"
+    @<form hx-delete="/recipes/@form.Id/delete" hx-target="#recipe-@form.Id" hx-swap="outerHTML"
            hx-on:htmx:after:request="if (event.detail.ctx.response.status === 200) { this.reset(); this.closest('dialog').close() }">
       <hgroup>
         <h3>Delete @form.Name</h3>
         <p>Are you sure?</p>
       </hgroup>
       <button type="submit">Save</button>
-      <button commandfor="delete-recipe" command="close">Close</button>
+      <button type="button" commandfor="delete-dialog" command="close">Cancel</button>
     </form>;
 }
 </dialog>
