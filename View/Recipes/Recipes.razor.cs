@@ -1,21 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using recipes.Services;
 
-namespace recipes.View;
-
-public static class WebApplicationExtension
-{
-  public static WebApplication MapRecipesRoutes(this WebApplication app)
-  {
-    return Recipes.MapRecipesRoutes(app);
-  }
-}
+namespace recipes.View.Recipes;
 
 public partial class Recipes
 {
-  public static WebApplication MapRecipesRoutes(WebApplication app)
+  public static RouteGroupBuilder MapRoutes(RouteGroupBuilder group)
   {
-    var group = app.MapGroup("recipes");
     group.MapGet("/", GetRecipesHandler);
     group.MapPost("/", CreateRecipeHandler);
     group.MapPut("/{id}/edit", EditRecipeHandler);
@@ -23,14 +14,18 @@ public partial class Recipes
     group.MapGet("/{id}/delete", GetDeleteConfirmationHandler);
     group.MapDelete("/{id}/delete", DeleteRecipeHandler);
 
-    return app;
+    return group;
   }
 
-  public static async Task<IResult> GetRecipesHandler(RecipeService service)
+  public static async Task<IResult> GetRecipesHandler(
+      RecipeService service,
+      [FromHeader(Name = "HX-Request-Type")] string requestType
+  )
   {
     var recipes = service.GetRecipes();
     var recipeViews = recipes.Select(r => new RecipeView(r.Id, r.Name));
-    ViewModel model = new(recipeViews);
+
+    ViewModel model = new(recipeViews, requestType != "partial");
 
     return model.RenderPage();
   }

@@ -27,10 +27,18 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlldy9GcmFnbWVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/pfes/Code/recipes/View/Home/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Vmlldy9Ib21lL0hvbWUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/pfes/Code/recipes/View/Layout.razor]
 build_metadata.AdditionalFiles.TargetPath = Vmlldy9MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/pfes/Code/recipes/View/Recipes.razor]
-build_metadata.AdditionalFiles.TargetPath = Vmlldy9SZWNpcGVzLnJhem9y
+[/Users/pfes/Code/recipes/View/Recipe/Recipe.razor]
+build_metadata.AdditionalFiles.TargetPath = Vmlldy9SZWNpcGUvUmVjaXBlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/pfes/Code/recipes/View/Recipes/Recipes.razor]
+build_metadata.AdditionalFiles.TargetPath = Vmlldy9SZWNpcGVzL1JlY2lwZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

@@ -34,3 +34,4 @@
 /Users/pfes/Code/recipes/obj/Debug/net11.0/recipes.genruntimeconfig.cache
 /Users/pfes/Code/recipes/obj/Debug/net11.0/ref/recipes.dll
 /Users/pfes/Code/recipes/obj/Debug/net11.0/recipes.csproj.Up2Date
+/Users/pfes/Code/recipes/obj/Debug/net11.0/recipes.sourcelink.json

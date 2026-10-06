@@ -1,23 +1,32 @@
 @using Microsoft.AspNetCore.Http.HttpResults
+@code {
 
-<Layout>
+  public record RecipeView(int Id, string Name);
+
+  public record ViewModel(IEnumerable<RecipeView> Recipes, bool Full = true)
+  {
+    public RazorComponentResult<Recipes> RenderPage() => new(new { Model = this });
+  }
+
+  [Parameter, EditorRequired]
+  public ViewModel Model { get; set; } = default!;
+}
+
+<Layout Show=@Model.Full>
   <section id="recipes-table">
     <article id="recipes">
-@RecipeList(Model.Recipes)
 @code {
   public static RenderFragment<RecipeView> Recipe => recipe => @<tr id="recipe-@recipe.Id">
-    <th scope="row">@recipe.Name</th>
+    <th scope="row"><a href="/recipe/@recipe.Id">@recipe.Name</a></th>
     <td>
-      <button hx-get="/recipes/@(recipe.Id)/edit"
-        hx-target="#edit-dialog"
-        hx-on:htmx:after:request="q('#edit-dialog').show()">
+      <button hx-get="/recipes/@(recipe.Id)/edit" hx-target="#edit-dialog"
+              hx-on:htmx:after:request="q('#edit-dialog').show()">
         ✏️
       </button>
     </td>
     <td>
-      <button hx-get="/recipes/@(recipe.Id)/delete"
-        hx-target="#delete-dialog"
-        hx-on:htmx:after:request="q('#delete-dialog').show()">
+      <button hx-get="/recipes/@(recipe.Id)/delete" hx-target="#delete-dialog"
+              hx-on:htmx:after:request="q('#delete-dialog').show()">
         🗑️
       </button>
     </td>
@@ -41,6 +50,7 @@
    </tbody>
  </table>;
 }
+@RecipeList(Model.Recipes)
 </article>
 <button command="show-modal" commandfor="add-recipe">Add Recipe</button>
 
@@ -90,15 +100,3 @@
 </dialog>
 </section>
 </Layout>
-
-@code {
-  public record RecipeView(int Id, string Name);
-
-  public record ViewModel(IEnumerable<RecipeView> Recipes)
-  {
-    public RazorComponentResult<Recipes> RenderPage() => new(new { Model = this });
-  }
-
-  [Parameter, EditorRequired]
-  public ViewModel Model { get; set; } = default!;
-}

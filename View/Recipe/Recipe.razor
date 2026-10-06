@@ -1,0 +1,38 @@
+@using Microsoft.AspNetCore.Http.HttpResults
+@code {
+  public record RecipeView(int Id, string Name, string Content);
+  public record ViewModel(RecipeView Recipe, bool Full = true)
+  {
+    public RazorComponentResult<Recipe> RenderPage()
+    {
+      return new(new { Model = this });
+    }
+  };
+
+  [Parameter, EditorRequired] public ViewModel Model { get; set; }
+}
+
+<Layout Show=@Model.Full>
+  <article id="recipe">
+@code {
+  public static RenderFragment<RecipeView> Display => recipe =>
+  @<text>
+    <hgroup style="display: flex;">
+      <h1>@recipe.Name</h1>
+      <button hx-get="/recipe/@recipe.Id/edit" hx-target="#recipe">✏️</button>
+    </hgroup>
+    <p>@recipe.Content</p>
+  </text>;
+
+  public static RenderFragment<RecipeView> EditForm => recipe => @<form hx-put="/recipe/@recipe.Id" hx-target="#recipe">
+    <input name="name" value=@recipe.Name />
+    <textarea name="content" value=@recipe.Content />
+    <button type="submit">Save</button>
+    <button type="button" hx-get="/recipe/@recipe.Id" hx-target="#recipe">Cancel</button>
+  </form>;
+}
+  @Display(Model.Recipe)
+</article>
+</Layout>
+
+

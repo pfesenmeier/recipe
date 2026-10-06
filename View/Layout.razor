@@ -1,3 +1,9 @@
+@if (!Show)
+{
+  @ChildContent
+  return;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,24 +20,21 @@
       <h1>Recipes</h1>
       <p>Paul's recipes, memories of cooking, planning tool.</p>
     </hgroup>
-    <nav>
+    <nav hx-boost:inherited="true" hx-target:inherited="main">
       <ul>
-        <li>Home</li>
-        <li>Recipes</li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/recipes">Recipes</a></li>
       </ul>
     </nav>
   </header>
   <main>
-  @ChildContent
+    @ChildContent
   </main>
   <script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0/dist/htmx.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0/dist/ext/hx-live.min.js"></script>
-<!-- Centered viewport -->
+  <!-- Centered viewport -->
 
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@@picocss/pico@2/css/pico.classless.min.css"
->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@2/css/pico.classless.min.css">
 </body>
 
 </html>
@@ -39,4 +42,7 @@
 @code {
   [Parameter]
   public RenderFragment ChildContent { get; set; } = default!;
+
+  [Parameter]
+  public bool Show { get; set; } = true;
 }

@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Http.HttpResults
+
+@code {
+    public record ViewModel(bool Full = true)
+  {
+    public RazorComponentResult<Home> RenderPage() => new(new { Model = this });
+  }
+
+  [Parameter, EditorRequired] public ViewModel Model { get; set; }
+
+}
+
+<Layout Show=@Model.Full>
+  Welcome to the recipes app.
+</Layout>

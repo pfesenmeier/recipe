@@ -7,6 +7,6 @@ builder.Services.AddRazorComponents();
 builder.Services.AddSingleton<RecipeService>();
 
 var app = builder.Build();
-app.MapRecipesRoutes();
+app.MapRoutes();
 
 app.Run();
